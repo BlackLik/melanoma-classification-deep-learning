@@ -66,6 +66,10 @@ select = ["ALL"]
 ignore = [
     "D",
     "ANN",
+    "T201",
+    "RUF001",
+    "RUF002",
+    "RUF003",
 ]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
