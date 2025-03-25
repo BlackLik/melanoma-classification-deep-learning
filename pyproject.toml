@@ -6,10 +6,17 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "opencv-python>=4.11.0.86",
+    "pydantic-settings>=2.8.1",
+    "pydantic[settings]>=2.10.6",
     "torch>=2.6.0",
     "torchaudio>=2.6.0",
     "torchvision>=0.21.0",
 ]
+
+[build-system]
+requires = ["setuptools>=76.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 
 [dependency-groups]
 dev = [
@@ -18,11 +25,12 @@ dev = [
     "ruff>=0.11.0",
     "scikit-learn>=1.6.1",
     "seaborn>=0.13.2",
+    "xgboost>=3.0.0",
 ]
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
-include = ["pyproject.toml", "src/**/*.py", "scripts/**/*.py"]
+include = ["pyproject.toml", "*.py", "*.ipynb"]
 exclude = [
     ".bzr",
     ".direnv",
@@ -63,14 +71,7 @@ target-version = "py313"
 # Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
 # McCabe complexity (`C901`) by default.
 select = ["ALL"]
-ignore = [
-    "D",
-    "ANN",
-    "T201",
-    "RUF001",
-    "RUF002",
-    "RUF003",
-]
+ignore = ["D", "ANN", "T201", "RUF001", "RUF002", "RUF003", "PLR0913"]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
