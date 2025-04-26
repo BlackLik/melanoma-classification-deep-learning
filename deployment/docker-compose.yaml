@@ -1,0 +1,16 @@
+services:
+  melanoma-jupyter:
+    container_name: melanoma_jupyter
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - ../:/workspace
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - capabilities: [ gpu ]
+    restart: unless-stopped
