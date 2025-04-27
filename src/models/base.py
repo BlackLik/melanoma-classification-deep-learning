@@ -68,8 +68,13 @@ class PyTorchModel:
             self.model.train()
             total_loss, correct, total = 0, 0, 0
 
-            for image, label, abcd_features in train_dataloader:
+            for batch in train_dataloader:
+                if batch is None:
+                    continue
+
                 self.optimizer.zero_grad()
+                image, label, abcd_features = batch
+                image, label, abcd_features = image.to(device), label.to(device), abcd_features.to(device)
                 args: tuple[Tensor] = (image, abcd_features) if self.use_abcd_test else (image,)
                 outputs: Tensor = self.model(*args)
                 loss = self.criterion(outputs, label)
@@ -94,7 +99,9 @@ class PyTorchModel:
             self.model.eval()
             correct, total = 0, 0
             with torch.no_grad():
-                for image, label, abcd_features in validation_dataloader:
+                for batch in validation_dataloader:
+                    image, label, abcd_features = batch
+                    image, label, abcd_features = image.to(device), label.to(device), abcd_features.to(device)
                     args: tuple[Tensor] = (image, abcd_features) if self.use_abcd_test else (image,)
                     outputs: Tensor = self.model(*args)
                     correct += (outputs.argmax(dim=1) == label).sum().item()

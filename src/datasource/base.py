@@ -13,8 +13,9 @@ def get_data_frame():
     df_data = pd.read_csv(settings.PATH_TO_LABELS_CSV)
     df_data = df_data[df_data["class"] != "SkinCancer"]
     df_data = df_data[df_data["class"] != "Moles"]
+    df_data = df_data[df_data["class"] != "Unknown_Normal"]
 
-    return df_data.sample(frac=0.02, random_state=42).reset_index(drop=True)
+    return df_data.sample(frac=1.0, random_state=42).reset_index(drop=True)
 
 
 def get_train_validate_test(df_data) -> tuple[SkinDataset, SkinDataset, SkinDataset]:
