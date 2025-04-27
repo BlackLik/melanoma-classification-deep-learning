@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libglib2.0-0
 
-RUN pip install jupyterlab==4.4.1 opencv-python
+RUN pip install jupyterlab==4.4.1 opencv-python timm
 
 # Установка Python-зависимостей проекта
 COPY requirements.txt /app/requirements.txt
