@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     curl \
     vim \
-    libgl1-mesa-glx
+    libgl1-mesa-glx \
+    libglib2.0-0
 
 RUN pip install jupyterlab==4.4.1 opencv-python
 
