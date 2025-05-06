@@ -176,3 +176,4 @@ cython_debug/
 # Database
 data/
 experiments/weights/*
+.Trash-*

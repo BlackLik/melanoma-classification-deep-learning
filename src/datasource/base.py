@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import torch
 from sklearn.model_selection import train_test_split
@@ -7,14 +9,19 @@ from src import config
 from src.datasource.dataset import SkinDataset
 from src.datasource.transformer import get_transformer
 
+def _check_file(row: dict) -> bool:
+    settings = config.get_settings()
+    return Path(settings.MAIN_DIR, row["class"], row["filename"]).exists()
 
 def get_data_frame():
     settings = config.get_settings()
     df_data = pd.read_csv(settings.PATH_TO_LABELS_CSV)
     df_data = df_data[df_data["class"] != "SkinCancer"]
     df_data = df_data[df_data["class"] != "Moles"]
+    df_data = df_data[df_data["class"] != "Unknown_Normal"]
+    df_data = df_data[df_data.apply(_check_file, axis=1)]
 
-    return df_data.sample(frac=0.02, random_state=42).reset_index(drop=True)
+    return df_data.sample(frac=1.0, random_state=42).reset_index(drop=True)
 
 
 def get_train_validate_test(df_data) -> tuple[SkinDataset, SkinDataset, SkinDataset]:
