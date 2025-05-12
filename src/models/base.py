@@ -142,14 +142,16 @@ class PyTorchModel:
         all_preds = []
 
         with torch.no_grad():  # Отключаем вычисление градиентов
-            for image, label, abcd_features in test_loader:
+            for batch in test_loader:
+                image, label, abcd_features = batch
+                image, label, abcd_features = image.to(device), label.to(device), abcd_features.to(device)
                 args: tuple[Tensor] = (image, abcd_features) if self.use_abcd_test else (image,)
                 outputs: Tensor = self.model(*args)
                 _, predicted = outputs.max(1)  # Получаем предсказания модели
 
-                all_labels.extend(label.numpy())  # Собираем истинные метки
+                all_labels.extend(label.cpu().numpy())  # Собираем истинные метки
                 # Собираем предсказания модели
-                all_preds.extend(predicted.to(device).numpy())
+                all_preds.extend(predicted.cpu().numpy())
 
         # Вычисляем F1-меру
         # Средневзвешенная F1-метрика
@@ -169,3 +171,14 @@ class PyTorchModel:
         plt.ylabel("Loss score")
         plt.legend()
         plt.title("Loss History")
+
+    def load_model(self, path_to_weights: str):
+        """
+        Загружает веса в модель.
+
+        :param path_to_weights: Путь к файлу с сохранёнными весами .pth
+        """
+        state_dict = torch.load(path_to_weights, map_location=torch.device("cpu"))
+        self.model.load_state_dict(state_dict)
+        self.model.eval()  # Переводим в режим inference
+        print(f"✅ Модель загружена из {path_to_weights}!")
